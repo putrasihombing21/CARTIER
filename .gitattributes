@@ -1,0 +1,2 @@
+# Bundled review contains third-party shader strings; review authored source instead.
+review/*.html -diff linguist-generated=true
