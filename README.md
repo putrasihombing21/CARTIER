@@ -29,6 +29,8 @@ npm run preview:file
 
 The first three check the code, checkout rules, and production build. The last command creates a self-contained `review/cartier-preview.html` after the production build. The review file is a demo export; its checkout runs locally. The application itself uses the server checkout route.
 
+Both versions use the same contact, address, bag and price validation. Phone numbers need 8–15 digits; a leading plus, spaces, brackets and hyphens are allowed. Invalid details keep you on the delivery form with a message explaining what to correct. The full application also repeats validation on the server.
+
 ## What is included
 
 - Original editable SVG wordmark and split-ring emblem. These are temporary design studies.

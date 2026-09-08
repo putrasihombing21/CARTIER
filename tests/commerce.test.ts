@@ -7,6 +7,14 @@ const valid={items:[{id:'after-hours-tee',size:'M',quantity:2}],customer};
 test('server computes canonical price and delivery',()=>{assert.equal(validateCheckout(valid).total,930000);assert.throws(()=>validateCheckout({...valid,total:1}));assert.throws(()=>validateCheckout({...valid,items:[{...valid.items[0],price:1}]}));});
 test('rejects invalid quantities, sizes, IDs and duplicate entries',()=>{for(const quantity of [-1,0,1.1,6])assert.throws(()=>validateCheckout({...valid,items:[{...valid.items[0],quantity}]}));assert.throws(()=>validateCheckout({...valid,items:[{...valid.items[0],id:'unknown'}]}));assert.throws(()=>validateCheckout({...valid,items:[{...valid.items[0],size:'XXL'}]}));assert.throws(()=>validateCheckout({...valid,items:[valid.items[0],valid.items[0]]}));assert.throws(()=>validateCheckout({...valid,items:[]}));});
 test('rejects incomplete or invalid contact and address details',()=>{for(const change of [{email:'bad'},{postalCode:'123'},{name:' '},{phone:'invalid'},{address:'x'}])assert.throws(()=>validateCheckout({...valid,customer:{...customer,...change}}));});
+test('phone numbers require 8–15 digits and allow ordinary formatting',()=>{
+  for(const phone of ['--------','() () ()','+62 123','1234567890123456','0800000000 ext 1']){
+    assert.throws(()=>validateCheckout({...valid,customer:{...customer,phone}}));
+  }
+  for(const phone of ['08000000000','+62 812-3456-7890','(021) 555-0123']){
+    assert.equal(validateCheckout({...valid,customer:{...customer,phone}}).customer.phone,phone);
+  }
+});
 test('payment defaults to demo and fails closed on production or missing keys',()=>{assert.equal(paymentConfig({}).mode,'demo');assert.throws(()=>paymentConfig({PAYMENT_MODE:'production'}));assert.throws(()=>paymentConfig({PAYMENT_MODE:'midtrans_sandbox'}));assert.throws(()=>paymentConfig({PAYMENT_MODE:'midtrans_sandbox',MIDTRANS_SERVER_KEY:'live-key',SITE_ORIGIN:'https://example.com'}));});
 test('origin checks reject cross-site checkout',()=>{assert.equal(sameOrigin(new Request('https://example.com/api/checkout',{headers:{Origin:'https://example.com'}})),true);assert.equal(sameOrigin(new Request('https://example.com/api/checkout',{headers:{Origin:'https://other.example'}})),false);});
 test('bounded JSON rejects oversized and non-JSON requests',async()=>{await assert.rejects(()=>readLimitedJson(new Request('https://example.com',{method:'POST',headers:{'Content-Type':'application/json'},body:'"'+'x'.repeat(13000)+'"'})));await assert.rejects(()=>readLimitedJson(new Request('https://example.com',{method:'POST',body:'{}'})));});

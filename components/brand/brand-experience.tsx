@@ -5,6 +5,7 @@ import { RadioGroup,RadioGroupItem } from "@/components/ui/radio-group";
 import { Dialog,DialogContent,DialogTitle,DialogDescription } from "@/components/ui/dialog";
 import { Sheet,SheetContent,SheetTitle,SheetDescription } from "@/components/ui/sheet";
 import { products,sizes,getProduct,currency,calculateCart,type Product,type CartLine,type Size } from "@/lib/commerce/catalog";
+import { validateCheckout } from "@/lib/commerce/validation";
 import HeroObject from "./hero-object";
 
 type CheckoutStep="details"|"payment"|"success";
@@ -57,8 +58,11 @@ export default function BrandExperience({offline=false}:{offline?:boolean}){
     event.preventDefault();setError("");setBusy(true);
     try{
       if(!cart.length)throw new Error("Your bag is empty. Add a piece to continue.");
-      if(offline){setOrder({id:`DEMO-${Date.now().toString(36).toUpperCase()}`,total:totals.total,mode:"demo"});setCheckoutStep("payment");return;}
-      const response=await fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:cart,customer})});
+      // The downloadable preview and hosted app share the same checkout rules.
+      // The server repeats these checks; browser validation is not a trust boundary.
+      const checkout=validateCheckout({items:cart,customer});
+      if(offline){setOrder({id:`DEMO-${Date.now().toString(36).toUpperCase()}`,total:checkout.total,mode:"demo"});setCheckoutStep("payment");return;}
+      const response=await fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:checkout.items,customer:checkout.customer})});
       const result=await response.json() as {id:string;total:number;mode:string;redirectUrl?:string;error?:string};if(!response.ok)throw new Error(result.error??"Checkout is unavailable. Please try again.");
       setOrder(result);setCheckoutStep("payment");
     }catch(err){setError(err instanceof Error?err.message:"We could not prepare checkout. Try again.");}finally{setBusy(false);}

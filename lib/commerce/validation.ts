@@ -1,12 +1,21 @@
 import {z} from 'zod';
 import {calculateCart,getProduct,sizes,type CartLine} from './catalog';
+const phoneSchema=z.string().trim().max(20).regex(/^\+?[0-9 ()-]+$/).refine(value=>{
+  const digitCount=value.replace(/\D/g,'').length;
+  return digitCount>=8&&digitCount<=15;
+});
 export const checkoutSchema=z.object({
   items:z.array(z.object({id:z.string().max(60),size:z.enum(sizes),quantity:z.number().int().min(1).max(5)}).strict()).min(1).max(12),
-  customer:z.object({name:z.string().trim().min(2).max(80),email:z.string().trim().email().max(254),phone:z.string().trim().regex(/^[+0-9 ()-]{8,20}$/),address:z.string().trim().min(5).max(200),city:z.string().trim().min(2).max(80),postalCode:z.string().regex(/^\d{5}$/)}).strict(),
+  customer:z.object({name:z.string().trim().min(2).max(80),email:z.string().trim().email().max(254),phone:phoneSchema,address:z.string().trim().min(5).max(200),city:z.string().trim().min(2).max(80),postalCode:z.string().regex(/^\d{5}$/)}).strict(),
 }).strict();
 export function validateCheckout(value:unknown){
  const parsed=checkoutSchema.safeParse(value);
- if(!parsed.success)throw new Error('Check your contact details, address and five-digit postal code.');
+ if(!parsed.success){
+  if(parsed.error.issues.some(issue=>issue.path[0]==='customer'&&issue.path[1]==='phone')){
+    throw new Error('Enter a phone number with 8–15 digits. Spaces, brackets and hyphens are allowed.');
+  }
+  throw new Error('Check your contact details, address and five-digit postal code.');
+ }
  const {items,customer}=parsed.data;
  const seen=new Set<string>();
  for(const line of items){if(!getProduct(line.id))throw new Error('A piece in your bag is unavailable. Please remove it.');const key=`${line.id}:${line.size}`;if(seen.has(key))throw new Error('Duplicate bag entries are not accepted.');seen.add(key);}

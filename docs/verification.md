@@ -13,3 +13,15 @@ Completed on 7 September 2026.
 - Midtrans merchant sandbox and webhook delivery were not exercised with credentials. The adapter was tested with a mocked provider. Live payments remain disabled.
 
 No hosting deployment, domain purchase, real order, payment or email subscription occurred. Browser-extension diagnostics were excluded from application errors.
+
+## Follow-up — 8 September 2026
+
+- Confirmed the existing PR remains open and unmerged, with no review comments.
+- Reproduced a phone-validation defect with a failing regression test: punctuation-only values and numbers longer than 15 digits were accepted.
+- Fixed phone validation to require 8–15 digits while accepting common formatting.
+- The downloadable preview and the application now call the same checkout validator before continuing to payment. The server still validates independently.
+- All ten commerce tests and TypeScript passed.
+- Production build passed. The regenerated 2.15 MB standalone preview passed JavaScript syntax and embedded-asset checks, including the updated shared validator.
+- Browser regression check passed: an invalid phone stayed on the delivery form with a clear error; corrected synthetic details reached demo payment; simulated bank transfer reached the honest no-charge completion state.
+- No application errors were observed during that flow. Browser-extension diagnostics were excluded.
+- No layout, branding, provider connection or hosting settings were changed. Earlier limits on GPU verification, system-level reduced-motion emulation and merchant-sandbox testing still apply. The downloadable HTML was not separately browser-tested during this follow-up.
