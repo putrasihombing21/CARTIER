@@ -1,8 +1,10 @@
 # CARTIER — Born After Midnight
 
-The first CARTIER website: an original dark streetwear brand world, with a working demo shopping flow. The website is not deployed. No real payments, email subscriptions, or orders are enabled.
+The first CARTIER website: an original dark streetwear brand world, with a working demo shopping flow. This version is for private review. No real payments, email subscriptions, or orders are enabled.
 
 ## Start here — no coding experience needed
+
+Private online review: [CARTIER — Born After Midnight](https://cartier-after-midnight.early-vole-9144.chatgpt.site). Sign in with the account that owns this Site. Access is restricted to the owner, and checkout stays in demo mode.
 
 You can review the website without installing anything: download `review/cartier-preview.html` from this branch and open it in a modern browser. This self-contained review includes the original images, 3D emblem, mobile layout and demo checkout. It does not contact a payment provider.
 
@@ -103,4 +105,4 @@ Images are compressed WebP with fixed dimensions and lazy loading below the fold
 
 ## Review and publication
 
-All website work is on `cartier-website-v1`. Review the Pull Request before merging. No website was deployed, no domain was purchased, and no live payment or email service was connected. The repository began empty; its initial base commit contains only `.gitkeep` so GitHub can compare the website branch in a Pull Request.
+All website work is on `cartier-website-v1`. Review the Pull Request before merging. The owner approved a private demo deployment through Sites on 9 September 2026. Public access, merging the GitHub Pull Request and real payments still require separate approval. No domain was purchased and no live payment or email service was connected. The repository began empty; its initial base commit contains only `.gitkeep` so GitHub can compare the website branch in a Pull Request.

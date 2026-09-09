@@ -25,3 +25,11 @@ No hosting deployment, domain purchase, real order, payment or email subscriptio
 - Browser regression check passed: an invalid phone stayed on the delivery form with a clear error; corrected synthetic details reached demo payment; simulated bank transfer reached the honest no-charge completion state.
 - No application errors were observed during that flow. Browser-extension diagnostics were excluded.
 - No layout, branding, provider connection or hosting settings were changed. Earlier limits on GPU verification, system-level reduced-motion emulation and merchant-sandbox testing still apply. The downloadable HTML was not separately browser-tested during this follow-up.
+
+## Private deployment preparation — 9 September 2026
+
+- The owner authorized private demo publication through Sites. Public access, GitHub PR merging and real payments remain out of scope.
+- Reused the last successful build because application source and dependencies are unchanged. Verified the Worker entrypoint exports a default fetch handler and the prepared output includes the database migration.
+- The application defaults to demo mode without payment credentials. No merchant or email service was connected.
+- Registered the hosting manifest for owner-only review and added the review address to the beginner README. The native Sites deployment result is the authority for publication status.
+- Earlier GPU, reduced-motion emulation and merchant-sandbox verification limitations remain unchanged.
