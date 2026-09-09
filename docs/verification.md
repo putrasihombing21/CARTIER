@@ -33,3 +33,5 @@ No hosting deployment, domain purchase, real order, payment or email subscriptio
 - The application defaults to demo mode without payment credentials. No merchant or email service was connected.
 - Registered the hosting manifest for owner-only review and added the review address to the beginner README. The native Sites deployment result is the authority for publication status.
 - Earlier GPU, reduced-motion emulation and merchant-sandbox verification limitations remain unchanged.
+
+The native Sites deployment completed successfully on 9 September 2026 with owner-only access. The verified review address is https://cartier-after-midnight.zyuryuz21.chatgpt.site. No public access, live payment or email-service connection was enabled. The GitHub Pull Request remains open and unmerged.
